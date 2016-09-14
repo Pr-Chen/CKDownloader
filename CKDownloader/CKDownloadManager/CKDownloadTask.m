@@ -42,22 +42,4 @@
     return dict;
 }
 
-- (void)start {
-    
-    if (!self.task) {
-        return;
-    }
-    [self.task resume];
-    _state = SFDownloadTaskStateRunning;
-}
-
-- (void)pause {
-    
-    if (!self.task) {
-        return ;
-    }
-    [self.task suspend];
-    _state = SFDownloadTaskStatePaused;
-}
-
 @end
