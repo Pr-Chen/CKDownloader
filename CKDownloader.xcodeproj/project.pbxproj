@@ -13,6 +13,9 @@
 		747664A81D89535600C21486 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 747664A61D89535600C21486 /* Main.storyboard */; };
 		747664AA1D89535600C21486 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 747664A91D89535600C21486 /* Assets.xcassets */; };
 		747664AD1D89535600C21486 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 747664AB1D89535600C21486 /* LaunchScreen.storyboard */; };
+		747664C01D8953DE00C21486 /* CKDownloadManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 747664BD1D8953DE00C21486 /* CKDownloadManager.m */; };
+		747664C11D8953DE00C21486 /* CKDownloadTask.m in Sources */ = {isa = PBXBuildFile; fileRef = 747664BF1D8953DE00C21486 /* CKDownloadTask.m */; };
+		747664C41D89547200C21486 /* NSString+Security.m in Sources */ = {isa = PBXBuildFile; fileRef = 747664C31D89547200C21486 /* NSString+Security.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -26,6 +29,12 @@
 		747664A91D89535600C21486 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		747664AC1D89535600C21486 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		747664AE1D89535600C21486 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		747664BC1D8953DE00C21486 /* CKDownloadManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CKDownloadManager.h; sourceTree = "<group>"; };
+		747664BD1D8953DE00C21486 /* CKDownloadManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CKDownloadManager.m; sourceTree = "<group>"; };
+		747664BE1D8953DE00C21486 /* CKDownloadTask.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CKDownloadTask.h; sourceTree = "<group>"; };
+		747664BF1D8953DE00C21486 /* CKDownloadTask.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CKDownloadTask.m; sourceTree = "<group>"; };
+		747664C21D89547200C21486 /* NSString+Security.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+Security.h"; sourceTree = "<group>"; };
+		747664C31D89547200C21486 /* NSString+Security.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+Security.m"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -58,6 +67,7 @@
 		7476649C1D89535600C21486 /* CKDownloader */ = {
 			isa = PBXGroup;
 			children = (
+				747664BB1D8953DE00C21486 /* CKDownloadManager */,
 				747664A01D89535600C21486 /* AppDelegate.h */,
 				747664A11D89535600C21486 /* AppDelegate.m */,
 				747664A31D89535600C21486 /* ViewController.h */,
@@ -77,6 +87,19 @@
 				7476649E1D89535600C21486 /* main.m */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		747664BB1D8953DE00C21486 /* CKDownloadManager */ = {
+			isa = PBXGroup;
+			children = (
+				747664BC1D8953DE00C21486 /* CKDownloadManager.h */,
+				747664BD1D8953DE00C21486 /* CKDownloadManager.m */,
+				747664BE1D8953DE00C21486 /* CKDownloadTask.h */,
+				747664BF1D8953DE00C21486 /* CKDownloadTask.m */,
+				747664C21D89547200C21486 /* NSString+Security.h */,
+				747664C31D89547200C21486 /* NSString+Security.m */,
+			);
+			path = CKDownloadManager;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -150,7 +173,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				747664A51D89535600C21486 /* ViewController.m in Sources */,
+				747664C11D8953DE00C21486 /* CKDownloadTask.m in Sources */,
 				747664A21D89535600C21486 /* AppDelegate.m in Sources */,
+				747664C41D89547200C21486 /* NSString+Security.m in Sources */,
+				747664C01D8953DE00C21486 /* CKDownloadManager.m in Sources */,
 				7476649F1D89535600C21486 /* main.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
