@@ -28,10 +28,11 @@ typedef void(^CKDownloadTaskStateChangeBlock)(CKDownloadTaskState state);
 
 - (instancetype)initWithUrl:(NSString *)url;
 - (instancetype)initWithDictionary:(NSDictionary *)dict;
-- (NSDictionary *)dictionaryForSave;
+
+//只转换存储所需要的属性
+- (NSDictionary *)dictionary;
 
 //必要的属性
-
 
 //下载地址
 @property (nonatomic, copy) NSString *url;
@@ -46,13 +47,13 @@ typedef void(^CKDownloadTaskStateChangeBlock)(CKDownloadTaskState state);
 @property (nonatomic, assign) float velocity;
 
 //已下载大小
-@property (assign, nonatomic) NSInteger existSize;
+@property (nonatomic, assign) NSInteger existSize;
 
 //要下载的文件总大小
-@property (assign, nonatomic) NSInteger expectedSize;
+@property (nonatomic, assign) NSInteger expectedSize;
 
 //对应的本地文件路径
-@property (copy, nonatomic) NSString *fileUrl;
+@property (nonatomic, copy) NSString *fileUrl;
 
 //数据流
 @property (nonatomic, strong) NSOutputStream *stream;
@@ -61,13 +62,15 @@ typedef void(^CKDownloadTaskStateChangeBlock)(CKDownloadTaskState state);
 @property (nonatomic, strong) NSURLSessionDataTask *task;
 
 //任务创建的时间
-@property (nonatomic, copy) NSString *startTime;
+@property (nonatomic, assign) NSInteger startTime;
 
 //任务完成的时间
-@property (nonatomic, copy) NSString *finishedTime;
+@property (nonatomic, assign) NSInteger finishTime;
 
-//进度变化的block, 状态改变的block
-@property (copy, nonatomic) CKDownloadTaskProgressBlock progressBlock;
-@property (copy, nonatomic) CKDownloadTaskStateChangeBlock stateChangeBlock;
+//进度变化的block
+@property (nonatomic, copy) CKDownloadTaskProgressBlock progressBlock;
+
+//状态改变的block
+@property (nonatomic, copy) CKDownloadTaskStateChangeBlock stateChangeBlock;
 
 @end

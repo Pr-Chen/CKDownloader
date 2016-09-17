@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		2A4D25B31D8B8B6500181830 /* CKDownloadManager2.m in Sources */ = {isa = PBXBuildFile; fileRef = 2A4D25B21D8B8B6500181830 /* CKDownloadManager2.m */; };
 		7476649F1D89535600C21486 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 7476649E1D89535600C21486 /* main.m */; };
 		747664A21D89535600C21486 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 747664A11D89535600C21486 /* AppDelegate.m */; };
 		747664A51D89535600C21486 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 747664A41D89535600C21486 /* ViewController.m */; };
@@ -19,6 +20,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		2A4D25B11D8B8B6500181830 /* CKDownloadManager2.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CKDownloadManager2.h; sourceTree = "<group>"; };
+		2A4D25B21D8B8B6500181830 /* CKDownloadManager2.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CKDownloadManager2.m; sourceTree = "<group>"; };
 		7476649A1D89535600C21486 /* CKDownloader.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CKDownloader.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		7476649E1D89535600C21486 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		747664A01D89535600C21486 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -92,6 +95,8 @@
 		747664BB1D8953DE00C21486 /* CKDownloadManager */ = {
 			isa = PBXGroup;
 			children = (
+				2A4D25B11D8B8B6500181830 /* CKDownloadManager2.h */,
+				2A4D25B21D8B8B6500181830 /* CKDownloadManager2.m */,
 				747664BC1D8953DE00C21486 /* CKDownloadManager.h */,
 				747664BD1D8953DE00C21486 /* CKDownloadManager.m */,
 				747664BE1D8953DE00C21486 /* CKDownloadTask.h */,
@@ -177,6 +182,7 @@
 				747664A21D89535600C21486 /* AppDelegate.m in Sources */,
 				747664C41D89547200C21486 /* NSString+Security.m in Sources */,
 				747664C01D8953DE00C21486 /* CKDownloadManager.m in Sources */,
+				2A4D25B31D8B8B6500181830 /* CKDownloadManager2.m in Sources */,
 				7476649F1D89535600C21486 /* main.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -328,6 +334,7 @@
 				747664B31D89535600C21486 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

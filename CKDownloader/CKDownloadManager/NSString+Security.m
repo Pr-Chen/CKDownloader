@@ -12,7 +12,6 @@
 
 @implementation NSString (Security)
 
-
 //得到当前时间的字符串
 + (NSString *)getCurrentTimeStamp {
     NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];

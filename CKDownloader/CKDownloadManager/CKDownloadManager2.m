@@ -5,21 +5,21 @@
 //  Copyright © 2015年 陈凯. All rights reserved.
 //
 
-// 下载路径
-#define CKDownloadFolder [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) lastObject] stringByAppendingPathComponent:@"CKDownloads"]
+// 缓存主目录
+#define SFDocumentDirectory [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) lastObject] stringByAppendingPathComponent:@"SFDownloadCaches"]
 
 // 保存文件名
-#define CKFileName(url) [url MD5String]
-#define CKFileNameWithExtension(url) [[url MD5String] stringByAppendingPathExtension:url.pathExtension]
+#define SFFileName(url) [url MD5String]
+#define SFFileNameWithExtension(url) [[url MD5String] stringByAppendingPathExtension:url.pathExtension]
 
-// 文件的存放路径
-#define CKFilePath(url) [CKDownloadFolder stringByAppendingPathComponent:CKFileNameWithExtension(url)]
+// 文件的存放路径（document）
+#define SFFileFullpath(url) [SFDocumentDirectory stringByAppendingPathComponent:SFFileNameWithExtension(url)]
 
 // 文件的已下载长度
-#define CKFileExistSize(url) [[[NSFileManager defaultManager] attributesOfItemAtPath:CKFilePath(url) error:nil][NSFileSize] integerValue]
+#define SFDownloadLength(url) [[[NSFileManager defaultManager] attributesOfItemAtPath:SFFileFullpath(url) error:nil][NSFileSize] integerValue]
 
-// 所有任务记录文件的路径
-#define CKAllTaskRecordFilePath [CKDownloadFolder stringByAppendingPathComponent:@"CKDownloadTasks.plist"]
+// 存储所有的下载任务（document）
+#define SFDownloadTasksFileFullpath [SFDocumentDirectory stringByAppendingPathComponent:@"SFDownloadTasks.plist"]
 
 #import "CKDownloadManager.h"
 #import "NSString+Security.h"
@@ -67,45 +67,47 @@ static CKDownloadManager *_defaultManager;
 
 #pragma mark - 创建任务
 
-- (CKDownloadTask *)downloadUrl:(NSString *)url progress:(CKDownloadTaskProgressBlock)progressBlock stateChangeBlock:(CKDownloadTaskStateChangeBlock)stateChangeBlock {
-    if (!url.length) {
-        return nil;
+//方式二: 通过url,创建下载任务,新建的全新任务
+- (void)creatDownloadTaskWith:(NSString *)url name:(NSString *)name imgUrl:(NSString *)imgUrl progress:(void(^)(NSInteger receivedSize, NSInteger expectedSize, float progress))progressBlock pause:(void(^)(BOOL pause))pauseBlock complete:(void(^)(BOOL success))completeBlock {
+    if (!url) {
+        return ;
     }
     
-    CKDownloadTask *task = [self taskForUrl:url];
-    if (!task) {
-        //创建task
-        task = [[CKDownloadTask alloc] initWithUrl:url];
-        self.allTasksDict[CKFileName(url)] = task;
-        task.progressBlock = progressBlock;
-        task.stateChangeBlock = stateChangeBlock;
+    CKDownloadTask *downloadTask = [self getDownloadTaskWithUrl:url];
+    if (!downloadTask) {
+        downloadTask = [[CKDownloadTask alloc] initWithUrl:url];
+        self.allTasksDict[SFFileName(url)] = downloadTask;
+        downloadTask.name = name;
+        downloadTask.imgUrl = imgUrl;
+        downloadTask.progressBlock = progressBlock;
+        downloadTask.pauseBlock = pauseBlock;
+        downloadTask.completeBlock = completeBlock;
         
-        [self updateAllTaskRecordFile];
+        [self saveAllDownloadTasks];
     }
     
-    //开始下载
-    [self startTask:task];
-    
-    return task;
+    [self startTask:downloadTask];
 }
+
 
 #pragma mark - 文件管理
-// 创建下载文件夹
-- (void)createDownloadFolder {
+
+// 创建缓存目录文件
+- (void)createCacheDirectory {
     NSFileManager *fileManager = [NSFileManager defaultManager];
-    if (![fileManager fileExistsAtPath:CKDownloadFolder]) {
-        [fileManager createDirectoryAtPath:CKDownloadFolder withIntermediateDirectories:YES attributes:nil error:NULL];
+    if (![fileManager fileExistsAtPath:SFDocumentDirectory]) {
+        [fileManager createDirectoryAtPath:SFDocumentDirectory withIntermediateDirectories:YES attributes:nil error:NULL];
     }
 }
 
-//更新保存所有的下载任务的文件
-- (void)updateAllTaskRecordFile {
-    NSMutableDictionary *resultDict = [NSMutableDictionary dictionary];
+//保存所有的下载任务
+- (void)saveAllDownloadTasks {
+    NSMutableDictionary *saveDict = [NSMutableDictionary dictionary];
     for (CKDownloadTask *downloadTask in self.allTasksDict.allValues) {
-        NSDictionary *dict = [downloadTask dictionary];
-        resultDict[CKFileName(downloadTask.url)] = dict;
+        NSDictionary *dict = [downloadTask dictionaryForSave];
+        saveDict[SFFileName(downloadTask.url)] = dict;
     }
-    [resultDict writeToFile:CKAllTaskRecordFilePath atomically:YES];
+    [saveDict writeToFile:SFDownloadTasksFileFullpath atomically:YES];
 }
 
 //获取下载在本地的文件的URL
@@ -131,12 +133,8 @@ static CKDownloadManager *_defaultManager;
     if (!downloadTask.url.length) {
         return;
     }
-    
-    //2.是否已在任务列表中(url是否有一样的)
-    
-    
-    //3.任务正在运行
-    if (downloadTask.state == CKDownloadTaskStateRunning) {
+    //2.任务正在运行
+    if (downloadTask.state == SFDownloadTaskStateRunning) {
         return;
     }
     //3.任务已完成
@@ -293,6 +291,32 @@ static CKDownloadManager *_defaultManager;
         task.pauseBlock(YES);
     }
 }
+
+/*
+//开始某个任务(通过url)
+- (void)startTaskWithUrl:(NSString *)url {
+    if (!url.length) {
+        return;
+    }
+    SFDownloadTask *downloadTask = [self getTaskBy:url];
+    [downloadTask start];
+    if (downloadTask.pauseBlock) {
+        downloadTask.pauseBlock(NO);
+    }
+}
+
+//暂停某个任务(通过url)
+- (void)pauseTaskWithUrl:(NSString *)url {
+    if (!url.length) {
+        return;
+    }
+    SFDownloadTask *downloadTask = [self getTaskBy:url];
+    [downloadTask pause];
+    if (downloadTask.pauseBlock) {
+        downloadTask.pauseBlock(YES);
+    }
+}
+*/
 
 //根据url获得对应的下载任务
 - (CKDownloadTask *)getDownloadTaskWithUrl:(NSString *)url {
@@ -457,7 +481,7 @@ static CKDownloadManager *_defaultManager;
 }
 
 /**
- * 下载完毕
+ * 请求完毕（成功|失败）
  */
 - (void)URLSession:(NSURLSession *)session task:(NSURLSessionTask *)task didCompleteWithError:(NSError *)error {
     
@@ -571,6 +595,37 @@ static CKDownloadManager *_defaultManager;
     return finishedTasks;
 }
 
+//未完成的任务
+- (NSArray *)unfinishTasks {
+    NSArray *allTasks = self.allTasks;
+    if (!allTasks.count) {
+        return nil;
+    }
+    NSMutableArray *unfinishTasks = [NSMutableArray array];
+    for (CKDownloadTask *downloadTask in allTasks) {
+        if (![self taskIsFinishedForUrl:downloadTask.url]) {
+            [unfinishTasks addObject:downloadTask];
+        }
+    }
+    return unfinishTasks;
+}
+
+//根据创建时间排好序的任务列表
+- (NSArray *)allTasksSortedByCreatedTime {
+    
+    NSArray *ary = self.allTasks;
+    NSArray *resultAry = [ary sortedArrayUsingComparator:^NSComparisonResult(id  _Nonnull obj1, id  _Nonnull obj2) {
+        NSInteger startTime1 = [((CKDownloadTask *)obj1).startTime integerValue];
+        NSInteger startTime2 = [((CKDownloadTask *)obj2).startTime integerValue];
+        if (startTime1 < startTime2) {
+            return NSOrderedAscending;
+        }
+        return NSOrderedDescending;
+    }];
+    
+    return resultAry;
+}
+
 //正在等待下载的任务
 - (NSArray *)waitingTasks {
     NSArray *unfinishTasks = self.unfinishTasks;
@@ -614,6 +669,56 @@ static CKDownloadManager *_defaultManager;
         }
     }
     return pausedTasks;
+}
+
+//设置最大同时下载数
+- (void)setMaxBothDownloadTasks:(NSUInteger)maxBothDownloadTasks {
+    if (maxBothDownloadTasks<=1) {
+        _maxBothDownloadTasks = 1;
+    }
+    else {
+        _maxBothDownloadTasks = maxBothDownloadTasks;
+    }
+}
+
+
+- (NSMutableArray *)tempRunningTasks {
+    if (!_tempRunningTasks) {
+        _tempRunningTasks = [NSMutableArray array];
+    }
+    return _tempRunningTasks;
+}
+
+- (NSMutableArray *)tempWaitingTasks {
+    if (!_tempWaitingTasks) {
+        _tempWaitingTasks = [NSMutableArray array];
+    }
+    return _tempWaitingTasks;
+}
+
+//临时暂停所有任务
+- (void)tempPauseAllTasks {
+    if (!self.runningTasks.count) {
+        return ;
+    }
+    [self.tempRunningTasks setArray:self.runningTasks];
+    [self.tempWaitingTasks setArray:self.waitingTasks];
+    [self pauseAllTasks];
+}
+
+//恢复临时暂停之前的状态
+- (void)resumeAllTasks {
+    if (!self.tempRunningTasks.count && !self.tempWaitingTasks.count) {
+        return ;
+    }
+    for (CKDownloadTask *task in self.tempRunningTasks) {
+        [self startTask:task];
+    }
+    for (CKDownloadTask *task in self.tempWaitingTasks) {
+        task.state = SFDownloadTaskStateWaiting;
+    }
+    [self.tempRunningTasks removeAllObjects];
+    [self.tempWaitingTasks removeAllObjects];
 }
 
 @end

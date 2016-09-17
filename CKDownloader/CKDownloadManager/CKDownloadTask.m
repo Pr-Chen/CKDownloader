@@ -18,27 +18,27 @@
 
 - (instancetype)initWithDictionary:(NSDictionary *)dict {
     if (self = [super init]) {
-        self.imgUrl = dict[@"imgUrl"];
-        self.name = dict[@"name"];
         self.url = dict[@"url"];
-        self.totalLength = [dict[@"totalLength"] integerValue];
-        self.startTime = dict[@"startTime"];
-        self.finishedTime = dict[@"finishedTime"];
-        self.direction = [dict[@"direction"] integerValue];
+        self.fileUrl = dict[@"fileUrl"];
+        self.existSize = [dict[@"existSize"] integerValue];
+        self.expectedSize = [dict[@"expectedSize"] integerValue];
+        self.startTime = [dict[@"startTime"] integerValue];
+        self.finishTime = [dict[@"finishedTime"] integerValue];
+        self.state = [dict[@"state"] integerValue];
     }
     return self;
 }
 
-- (NSDictionary *)dictionaryForSave {
+- (NSDictionary *)dictionary {
     
     NSMutableDictionary *dict = [NSMutableDictionary dictionary];
-    dict[@"imgUrl"] = self.imgUrl;
-    dict[@"name"] = self.name;
     dict[@"url"] = self.url;
-    dict[@"totalLength"] = @(self.totalLength);
-    dict[@"startTime"] = self.startTime;
-    dict[@"finishedTime"] = self.finishedTime;
-    dict[@"direction"] = @(self.direction);
+    dict[@"fileUrl"] = self.fileUrl;
+    dict[@"existSize"] = @(self.existSize);
+    dict[@"expectedSize"] = @(self.expectedSize);
+    dict[@"startTime"] = @(self.startTime);
+    dict[@"finishTime"] = @(self.finishTime);
+    dict[@"state"] = @(self.state);
     return dict;
 }
 
