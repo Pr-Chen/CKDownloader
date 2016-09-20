@@ -89,50 +89,18 @@ static CKDownloadManager *_defaultManager;
     return task;
 }
 
-#pragma mark - 文件管理
-// 创建下载文件夹
-- (void)createDownloadFolder {
-    NSFileManager *fileManager = [NSFileManager defaultManager];
-    if (![fileManager fileExistsAtPath:CKDownloadFolder]) {
-        [fileManager createDirectoryAtPath:CKDownloadFolder withIntermediateDirectories:YES attributes:nil error:NULL];
-    }
-}
-
-//更新保存所有的下载任务的文件
-- (void)updateAllTaskRecordFile {
-    NSMutableDictionary *resultDict = [NSMutableDictionary dictionary];
-    for (CKDownloadTask *downloadTask in self.allTasksDict.allValues) {
-        NSDictionary *dict = [downloadTask dictionary];
-        resultDict[CKFileName(downloadTask.url)] = dict;
-    }
-    [resultDict writeToFile:CKAllTaskRecordFilePath atomically:YES];
-}
-
-//获取下载在本地的文件的URL
-- (NSString *)localFileUrlWithUrl:(NSString *)url {
-    if (!url.length) {
-        return nil;
-    }
-    NSFileManager *fileManager = [NSFileManager defaultManager];
-    NSString *videoPath = SFFileFullpath(url);
-    BOOL isExist = [fileManager fileExistsAtPath:videoPath];
-    if (isExist) {
-        return [NSString stringWithFormat:@"file://%@",videoPath];
-    }
-    else {
-        return nil;
-    }
-}
-
 #pragma mark - 任务管理
 
+#warning - 要改
 - (void)startTask:(CKDownloadTask *)downloadTask {
     //1.任务是否有效
     if (!downloadTask.url.length) {
         return;
     }
     
-    //2.是否已在任务列表中(url是否有一样的)
+    //判断是否要创建下载目录
+    
+    //2.是否已在任务列表中(url是否有一样的),没有则需要加入
     
     
     //3.任务正在运行
@@ -145,66 +113,70 @@ static CKDownloadManager *_defaultManager;
     }
     
     //已达最大下载数
-    if ([self newTaskShouldWaiting]) {
+    if (self.runningTasks.count > self.maxRunningTasksAmount) {
         //4.任务切换至等待状态
-        if (downloadTask.state == SFDownloadTaskStatePaused) {
-            downloadTask.state = SFDownloadTaskStateWaiting;
+        if (downloadTask.state == CKDownloadTaskStatePaused) {
+            downloadTask.state = CKDownloadTaskStateWaiting;
             return;
         }
         //5.任务处于等待状态,则让任意一个运行着的任务变成等待状态
-        else if (downloadTask.state == SFDownloadTaskStateWaiting) {
+        else if (downloadTask.state == CKDownloadTaskStateWaiting) {
             [self makeAnyRuningTaskWaiting];
         }
     }
     
     //6.是否已有task对象,有则直接下载,没有则先创建
     if (!downloadTask.task) {
-        [self creatRequestAndFileDataForTask:downloadTask];
+        [self creatSessionForTask:downloadTask];
+    }
+    if (!downloadTask.stream) {
+        [self creatStreamForTask:downloadTask];
     }
     //7.开始
     [downloadTask.task resume];
-    downloadTask.state = SFDownloadTaskStateRunning;
+    downloadTask.state = CKDownloadTaskStateRunning;
     
-    if (downloadTask.pauseBlock) {
-        downloadTask.pauseBlock(NO);
+    //设置任务创建时间
+    
+    if (downloadTask.stateChangeBlock) {
+        downloadTask.stateChangeBlock(downloadTask.state);
     }
 }
 
-//创建新的数据请求与输入输出流
-- (void)creatRequestAndFileDataForTask:(CKDownloadTask *)downloadTask {
-    if (!downloadTask.url.length) {
-        return;
-    }
-    [self createCacheDirectory];
-    
-    NSURLSession *session = [NSURLSession sessionWithConfiguration:[NSURLSessionConfiguration defaultSessionConfiguration] delegate:self delegateQueue:[[NSOperationQueue alloc] init]];
-    // 创建流
-    NSOutputStream *stream = [NSOutputStream outputStreamToFileAtPath:SFFileFullpath(downloadTask.url) append:YES];
+//创建新的数据请求
+- (void)creatSessionForTask:(CKDownloadTask *)task {
+    NSURLSession *session = [NSURLSession sessionWithConfiguration:[NSURLSessionConfiguration defaultSessionConfiguration] delegate:self delegateQueue:[NSOperationQueue new]];
     // 创建请求
-    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:downloadTask.url]];
+    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:task.url]];
     // 设置请求头
-    NSString *range = [NSString stringWithFormat:@"bytes=%zd-", SFDownloadLength(downloadTask.url)];
+    NSString *range = [NSString stringWithFormat:@"bytes=%zd-", task.existSize];
     [request setValue:range forHTTPHeaderField:@"Range"];
     
     // 创建一个Data任务
-    NSURLSessionDataTask *task = [session dataTaskWithRequest:request];
+    NSURLSessionDataTask *dataTask = [session dataTaskWithRequest:request];
     NSUInteger taskIdentifier = arc4random() % ((arc4random() % 10000 + arc4random() % 10000));
     [task setValue:@(taskIdentifier) forKeyPath:@"taskIdentifier"];
-    downloadTask.task = task;
-    downloadTask.stream = stream;
-    if (!downloadTask.startTime.length) {
-        downloadTask.startTime = [NSString stringWithFormat:@"%f",[[NSDate new] timeIntervalSince1970]];
-    }
-
-    CKDownloadTask *tempTask = [self.allTasksDict valueForKey:SFFileName(downloadTask.url)];
-    if (!tempTask) {
-        self.allTasksDict[SFFileName(downloadTask.url)] = downloadTask;
-    }
-    
+    task.task = dataTask;
 }
 
+//创建新的输出流
+- (void)creatStreamForTask:(CKDownloadTask *)task {
+    // 创建流
+    NSOutputStream *stream = [NSOutputStream outputStreamToFileAtPath:CKFilePath(task.url) append:YES];
+    task.stream = stream;
+}
+
+- (void)pauseTask:(CKDownloadTask *)task {
+    [self pauseTask:task waitingTaskShouldStart:YES];
+}
+
+#warning - 要改
 //暂停某个任务
-- (void)pauseTask:(CKDownloadTask *)downloadTask {
+- (void)pauseTask:(CKDownloadTask *)downloadTask waitingTaskShouldStart:(BOOL)shouldStart {
+    
+    //1.判断任务是否有效,并且在任务列表中
+    
+    
     if (!downloadTask.url || !downloadTask.task) {
         return;
     }
@@ -213,54 +185,45 @@ static CKDownloadManager *_defaultManager;
         return;
     }
     //任务已暂停
-    if (downloadTask.state == SFDownloadTaskStatePaused) {
+    if (downloadTask.state == CKDownloadTaskStatePaused) {
         return;
     }
     //任务已失败
-    if (downloadTask.state == SFDownloadTaskStateFailed) {
+    if (downloadTask.state == CKDownloadTaskStateFailed) {
         return;
     }
     
     //暂停任务
     [downloadTask.task suspend];
-    downloadTask.state = SFDownloadTaskStatePaused;
+    downloadTask.state = CKDownloadTaskStatePaused;
     // 关闭流
-    downloadTask.task = nil;
     [downloadTask.stream close];
-    downloadTask.stream = nil;
     
-    //判断一下是否有等待的任务,如果有
-    [self makeAnyWaitingTaskRunning];
+    if (shouldStart) {
+        //判断一下是否有等待的任务,如果有
+        [self makeAnyWaitingTaskRunning];
+    }
     
-    if (downloadTask.pauseBlock) {
-        downloadTask.pauseBlock(YES);
+    if (downloadTask.stateChangeBlock) {
+        downloadTask.stateChangeBlock(downloadTask.state);
     }
 }
 
 //暂停所有任务
 - (void)pauseAllTasks {
-    for (CKDownloadTask *downloadTask in self.allTasks) {
-        if (downloadTask.state == SFDownloadTaskStateRunning || downloadTask.state == SFDownloadTaskStateWaiting) {
-            [downloadTask.task suspend];
-            downloadTask.state = SFDownloadTaskStatePaused;
-            
-            // 关闭流
-            downloadTask.task = nil;
-            [downloadTask.stream close];
-            downloadTask.stream = nil;
-        }
+    for (CKDownloadTask *task in self.allTasks) {
+        [self pauseTask:task waitingTaskShouldStart:NO];
     }
 }
 
 //开始所有任务
 - (void)startAllTasks {
     for (CKDownloadTask *downloadTask in self.allTasks) {
-        if (downloadTask.state == SFDownloadTaskStatePaused || downloadTask.state == SFDownloadTaskStateWaiting) {
-            [self startTask:downloadTask];
-        }
+        [self startTask:downloadTask];
     }
 }
 
+#warning - 要改
 //让任意一个正在运行的任务处于等待中
 - (void)makeAnyRuningTaskWaiting {
     if (!self.runningTasks.count) {
@@ -275,7 +238,7 @@ static CKDownloadManager *_defaultManager;
         [downloadTask.stream close];
         downloadTask.stream = nil;
     }
-    downloadTask.state = SFDownloadTaskStateWaiting;
+    downloadTask.state = CKDownloadTaskStateWaiting;
 }
 
 //让任意一个处于等待中的任务开始运行
@@ -284,28 +247,14 @@ static CKDownloadManager *_defaultManager;
         return;
     }
     CKDownloadTask *task = self.waitingTasks.firstObject;
-    if (!task.task) {
-        [self creatRequestAndFileDataForTask:task];
-    }
-    [task.task resume];
-    task.state = SFDownloadTaskStateRunning;
-    if (task.pauseBlock) {
-        task.pauseBlock(YES);
-    }
+    [self startTask:task];
 }
 
-//根据url获得对应的下载任务
-- (CKDownloadTask *)getDownloadTaskWithUrl:(NSString *)url {
-    
-    if (!url) {
+- (CKDownloadTask *)taskForUrl:(NSString *)url {
+    if (!url.length) {
         return nil;
     }
-    return [self.allTasksDict valueForKey:SFFileName(url)];
-}
-
-//判断一个任务是否应该等待
-- (BOOL)newTaskShouldWaiting {
-    return self.runningTasks.count >= self.maxBothDownloadTasks;
+    return [self.allTasksDict valueForKey:CKFileName(url)];
 }
 
 //判断该文件是否下载完成
@@ -331,10 +280,7 @@ static CKDownloadManager *_defaultManager;
     return [dict[@"totalLength"] integerValue];
 }
 
-#pragma mark - 删除
-/**
- *  删除下载任务
- */
+//删除下载任务
 - (void)deleteTaskWithUrl:(NSString *)url {
     if (!url) {
         return ;
@@ -363,9 +309,7 @@ static CKDownloadManager *_defaultManager;
     }
 }
 
-/**
- *  清空所有下载资源
- */
+//清空所有下载资源
 - (void)deleteAllTasks {
     
     NSFileManager *fileManager = [NSFileManager defaultManager];
@@ -516,6 +460,42 @@ static CKDownloadManager *_defaultManager;
     }
     return freeSpace/1024.0/1024;
 }
+
+#pragma mark - 文件管理
+// 创建下载文件夹
+- (void)createDownloadFolder {
+    NSFileManager *fileManager = [NSFileManager defaultManager];
+    if (![fileManager fileExistsAtPath:CKDownloadFolder]) {
+        [fileManager createDirectoryAtPath:CKDownloadFolder withIntermediateDirectories:YES attributes:nil error:NULL];
+    }
+}
+
+//更新保存所有的下载任务的文件
+- (void)updateAllTaskRecordFile {
+    NSMutableDictionary *resultDict = [NSMutableDictionary dictionary];
+    for (CKDownloadTask *downloadTask in self.allTasksDict.allValues) {
+        NSDictionary *dict = [downloadTask dictionary];
+        resultDict[CKFileName(downloadTask.url)] = dict;
+    }
+    [resultDict writeToFile:CKAllTaskRecordFilePath atomically:YES];
+}
+
+//获取下载在本地的文件的URL
+- (NSString *)localFileUrlWithUrl:(NSString *)url {
+    if (!url.length) {
+        return nil;
+    }
+    NSFileManager *fileManager = [NSFileManager defaultManager];
+    NSString *videoPath = SFFileFullpath(url);
+    BOOL isExist = [fileManager fileExistsAtPath:videoPath];
+    if (isExist) {
+        return [NSString stringWithFormat:@"file://%@",videoPath];
+    }
+    else {
+        return nil;
+    }
+}
+
 
 #pragma mark - getter & setter
 //所有任务,用字典存储,url的MD5为key值
