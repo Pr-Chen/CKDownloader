@@ -10,13 +10,12 @@
 
 typedef NS_ENUM(NSInteger, CKDownloadTaskState) {
     
-    CKDownloadTaskStatePaused = 0,    //已暂停
-    CKDownloadTaskStateRunning = 1,   //正在下载
-    CKDownloadTaskStateWaiting = 2,   //等待中
-    CKDownloadTaskStateFinished = 3,  //已完成
-    CKDownloadTaskStateFailed = 4,    //已失败
-    CKDownloadTaskStateNotJion = 5,  //还未加入任务列表
-    CKDownloadTaskStateWriteToFileFailed = 6, //写入文件失败
+    CKDownloadTaskStatePaused,    //已暂停
+    CKDownloadTaskStateRunning,   //正在下载
+    CKDownloadTaskStateWaiting,   //等待中
+    CKDownloadTaskStateFinished,  //已完成
+    CKDownloadTaskStateFailed,    //已失败
+    CKDownloadTaskStateWriteToFileFailed, //写入文件失败
 };
 
 typedef void(^CKDownloadTaskProgressBlock)(NSInteger receivedSize, NSInteger expectedSize);
@@ -59,13 +58,13 @@ typedef void(^CKDownloadTaskStateChangeBlock)(CKDownloadTaskState state);
 @property (nonatomic, strong) NSOutputStream *stream;
 
 //下载任务
-@property (nonatomic, strong) NSURLSessionDataTask *task;
+@property (nonatomic, strong) NSURLSessionDataTask *dataTask;
 
 //任务创建的时间
-@property (nonatomic, assign) NSInteger startTime;
+@property (nonatomic, strong) NSDate *creatDate;
 
 //任务完成的时间
-@property (nonatomic, assign) NSInteger finishTime;
+@property (nonatomic, strong) NSDate *finishDate;
 
 //进度变化的block
 @property (nonatomic, copy) CKDownloadTaskProgressBlock progressBlock;

@@ -20,10 +20,10 @@
     if (self = [super init]) {
         self.url = dict[@"url"];
         self.fileUrl = dict[@"fileUrl"];
-        self.existSize = [dict[@"existSize"] integerValue];
+//        self.existSize = [dict[@"existSize"] integerValue];
         self.expectedSize = [dict[@"expectedSize"] integerValue];
-        self.startTime = [dict[@"startTime"] integerValue];
-        self.finishTime = [dict[@"finishedTime"] integerValue];
+        self.creatDate = dict[@"creatDate"];
+        self.finishDate = dict[@"finishDate"];
         self.state = [dict[@"state"] integerValue];
     }
     return self;
@@ -34,10 +34,10 @@
     NSMutableDictionary *dict = [NSMutableDictionary dictionary];
     dict[@"url"] = self.url;
     dict[@"fileUrl"] = self.fileUrl;
-    dict[@"existSize"] = @(self.existSize);
+//    dict[@"existSize"] = @(self.existSize);
     dict[@"expectedSize"] = @(self.expectedSize);
-    dict[@"startTime"] = @(self.startTime);
-    dict[@"finishTime"] = @(self.finishTime);
+    dict[@"creatDate"] = self.creatDate;
+    dict[@"finishDate"] = self.finishDate;
     dict[@"state"] = @(self.state);
     return dict;
 }
