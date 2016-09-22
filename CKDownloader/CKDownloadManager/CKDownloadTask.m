@@ -9,18 +9,19 @@
 
 @implementation CKDownloadTask
 
-- (instancetype)initWithUrl:(NSString *)url {
-    if (self = [super init]) {
-        self.url = url;
-    }
-    return self;
++ (instancetype)taskWithUrl:(NSString *)url progress:(CKDownloadTaskProgressBlock)progressBlock stateChangeBlock:(CKDownloadTaskStateChangeBlock)stateChangeBlock {
+    
+    CKDownloadTask *task = [self new];
+    task.url = url;
+    task.progressBlock = progressBlock;
+    task.stateChangeBlock = stateChangeBlock;
+    return task;
 }
 
 - (instancetype)initWithDictionary:(NSDictionary *)dict {
     if (self = [super init]) {
         self.url = dict[@"url"];
         self.fileUrl = dict[@"fileUrl"];
-//        self.existSize = [dict[@"existSize"] integerValue];
         self.expectedSize = [dict[@"expectedSize"] integerValue];
         self.creatDate = dict[@"creatDate"];
         self.finishDate = dict[@"finishDate"];
@@ -34,11 +35,14 @@
     NSMutableDictionary *dict = [NSMutableDictionary dictionary];
     dict[@"url"] = self.url;
     dict[@"fileUrl"] = self.fileUrl;
-//    dict[@"existSize"] = @(self.existSize);
     dict[@"expectedSize"] = @(self.expectedSize);
     dict[@"creatDate"] = self.creatDate;
     dict[@"finishDate"] = self.finishDate;
-    dict[@"state"] = @(self.state);
+    
+    if (self.state==CKDownloadTaskStateFinished || self.state==CKDownloadTaskStateFailed) {
+        dict[@"state"] = @(self.state);
+    }
+    
     return dict;
 }
 

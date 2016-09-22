@@ -11,11 +11,11 @@
 @interface CKDownloadManager : NSObject
 
 @property (nonatomic, strong) NSMutableArray *allTasks;
-@property (nonatomic, strong) NSArray *finishedTasks;
+@property (nonatomic, strong) NSMutableArray *finishedTasks;
 
-@property (nonatomic, strong) NSArray *waitingTasks;//所有等待中的任务
-@property (nonatomic, strong) NSArray *runningTasks;//所有正在下载的任务
-@property (nonatomic, strong) NSArray *pausedTasks;//所有已暂停的任务
+@property (nonatomic, strong) NSMutableArray *waitingTasks;//所有等待中的任务
+@property (nonatomic, strong) NSMutableArray *runningTasks;//所有正在下载的任务
+@property (nonatomic, strong) NSMutableArray *pausedTasks;//所有已暂停的任务
 
 @property (nonatomic, assign) NSUInteger maxRunningTasksAmount; //同时下载的最大任务数
 
@@ -26,8 +26,6 @@
 - (CKDownloadTask *)taskForUrl:(NSString *)url;
 
 - (void)deleteTask:(CKDownloadTask *)task deleteFile:(BOOL)deleteFile;
-//- (void)deleteTaskForUrl:(NSString *)url;
-
 - (void)deleteAllTasks;
 
 //继续任务
@@ -44,5 +42,13 @@
 
 //可用存储空间
 - (float)freeDiskSpace;
+
+@end
+
+
+
+@interface NSString (MD5)
+
+@property (nonatomic, copy, readonly) NSString *MD5String;
 
 @end

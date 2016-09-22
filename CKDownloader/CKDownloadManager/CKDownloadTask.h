@@ -15,18 +15,16 @@ typedef NS_ENUM(NSInteger, CKDownloadTaskState) {
     CKDownloadTaskStateWaiting,   //等待中
     CKDownloadTaskStateFinished,  //已完成
     CKDownloadTaskStateFailed,    //已失败
-    CKDownloadTaskStateWriteToFileFailed, //写入文件失败
 };
 
 typedef void(^CKDownloadTaskProgressBlock)(NSInteger receivedSize, NSInteger expectedSize);
 
-typedef void(^CKDownloadTaskStateChangeBlock)(CKDownloadTaskState state);
-
+typedef void(^CKDownloadTaskStateChangeBlock)(CKDownloadTaskState state, NSString *message);
 
 @interface CKDownloadTask : NSObject
 
-- (instancetype)initWithUrl:(NSString *)url;
 - (instancetype)initWithDictionary:(NSDictionary *)dict;
++ (instancetype)taskWithUrl:(NSString *)url progress:(CKDownloadTaskProgressBlock)progressBlock stateChangeBlock:(CKDownloadTaskStateChangeBlock)stateChangeBlock;
 
 //只转换存储所需要的属性
 - (NSDictionary *)dictionary;
