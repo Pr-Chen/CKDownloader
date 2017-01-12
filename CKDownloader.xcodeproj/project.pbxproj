@@ -7,27 +7,29 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		2A4D25B31D8B8B6500181830 /* CKDownloadManager2.m in Sources */ = {isa = PBXBuildFile; fileRef = 2A4D25B21D8B8B6500181830 /* CKDownloadManager2.m */; };
+		7439F96C1D93B63D00B23FAC /* VideoCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 7439F96B1D93B63D00B23FAC /* VideoCell.m */; };
+		7439F96F1D93B7DE00B23FAC /* VideoTask.m in Sources */ = {isa = PBXBuildFile; fileRef = 7439F96E1D93B7DE00B23FAC /* VideoTask.m */; };
 		7476649F1D89535600C21486 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 7476649E1D89535600C21486 /* main.m */; };
 		747664A21D89535600C21486 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 747664A11D89535600C21486 /* AppDelegate.m */; };
-		747664A51D89535600C21486 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 747664A41D89535600C21486 /* ViewController.m */; };
+		747664A51D89535600C21486 /* HomeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 747664A41D89535600C21486 /* HomeViewController.m */; };
 		747664A81D89535600C21486 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 747664A61D89535600C21486 /* Main.storyboard */; };
 		747664AA1D89535600C21486 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 747664A91D89535600C21486 /* Assets.xcassets */; };
 		747664AD1D89535600C21486 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 747664AB1D89535600C21486 /* LaunchScreen.storyboard */; };
 		747664C01D8953DE00C21486 /* CKDownloadManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 747664BD1D8953DE00C21486 /* CKDownloadManager.m */; };
 		747664C11D8953DE00C21486 /* CKDownloadTask.m in Sources */ = {isa = PBXBuildFile; fileRef = 747664BF1D8953DE00C21486 /* CKDownloadTask.m */; };
-		747664C41D89547200C21486 /* NSString+Security.m in Sources */ = {isa = PBXBuildFile; fileRef = 747664C31D89547200C21486 /* NSString+Security.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		2A4D25B11D8B8B6500181830 /* CKDownloadManager2.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CKDownloadManager2.h; sourceTree = "<group>"; };
-		2A4D25B21D8B8B6500181830 /* CKDownloadManager2.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CKDownloadManager2.m; sourceTree = "<group>"; };
+		7439F96A1D93B63D00B23FAC /* VideoCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VideoCell.h; sourceTree = "<group>"; };
+		7439F96B1D93B63D00B23FAC /* VideoCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VideoCell.m; sourceTree = "<group>"; };
+		7439F96D1D93B7DE00B23FAC /* VideoTask.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VideoTask.h; sourceTree = "<group>"; };
+		7439F96E1D93B7DE00B23FAC /* VideoTask.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VideoTask.m; sourceTree = "<group>"; };
 		7476649A1D89535600C21486 /* CKDownloader.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CKDownloader.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		7476649E1D89535600C21486 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		747664A01D89535600C21486 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		747664A11D89535600C21486 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
-		747664A31D89535600C21486 /* ViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
-		747664A41D89535600C21486 /* ViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
+		747664A31D89535600C21486 /* HomeViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HomeViewController.h; sourceTree = "<group>"; };
+		747664A41D89535600C21486 /* HomeViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HomeViewController.m; sourceTree = "<group>"; };
 		747664A71D89535600C21486 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		747664A91D89535600C21486 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		747664AC1D89535600C21486 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -36,8 +38,6 @@
 		747664BD1D8953DE00C21486 /* CKDownloadManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CKDownloadManager.m; sourceTree = "<group>"; };
 		747664BE1D8953DE00C21486 /* CKDownloadTask.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CKDownloadTask.h; sourceTree = "<group>"; };
 		747664BF1D8953DE00C21486 /* CKDownloadTask.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CKDownloadTask.m; sourceTree = "<group>"; };
-		747664C21D89547200C21486 /* NSString+Security.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+Security.h"; sourceTree = "<group>"; };
-		747664C31D89547200C21486 /* NSString+Security.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+Security.m"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -51,6 +51,34 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		7439F9671D93B5A100B23FAC /* Controller */ = {
+			isa = PBXGroup;
+			children = (
+				747664A31D89535600C21486 /* HomeViewController.h */,
+				747664A41D89535600C21486 /* HomeViewController.m */,
+				747664A61D89535600C21486 /* Main.storyboard */,
+			);
+			name = Controller;
+			sourceTree = "<group>";
+		};
+		7439F9681D93B5B800B23FAC /* View */ = {
+			isa = PBXGroup;
+			children = (
+				7439F96A1D93B63D00B23FAC /* VideoCell.h */,
+				7439F96B1D93B63D00B23FAC /* VideoCell.m */,
+			);
+			name = View;
+			sourceTree = "<group>";
+		};
+		7439F9691D93B5C000B23FAC /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				7439F96D1D93B7DE00B23FAC /* VideoTask.h */,
+				7439F96E1D93B7DE00B23FAC /* VideoTask.m */,
+			);
+			name = Model;
+			sourceTree = "<group>";
+		};
 		747664911D89535600C21486 = {
 			isa = PBXGroup;
 			children = (
@@ -70,15 +98,12 @@
 		7476649C1D89535600C21486 /* CKDownloader */ = {
 			isa = PBXGroup;
 			children = (
-				747664BB1D8953DE00C21486 /* CKDownloadManager */,
 				747664A01D89535600C21486 /* AppDelegate.h */,
 				747664A11D89535600C21486 /* AppDelegate.m */,
-				747664A31D89535600C21486 /* ViewController.h */,
-				747664A41D89535600C21486 /* ViewController.m */,
-				747664A61D89535600C21486 /* Main.storyboard */,
-				747664A91D89535600C21486 /* Assets.xcassets */,
-				747664AB1D89535600C21486 /* LaunchScreen.storyboard */,
-				747664AE1D89535600C21486 /* Info.plist */,
+				7439F9671D93B5A100B23FAC /* Controller */,
+				7439F9681D93B5B800B23FAC /* View */,
+				7439F9691D93B5C000B23FAC /* Model */,
+				747664BB1D8953DE00C21486 /* CKDownloadManager */,
 				7476649D1D89535600C21486 /* Supporting Files */,
 			);
 			path = CKDownloader;
@@ -88,6 +113,9 @@
 			isa = PBXGroup;
 			children = (
 				7476649E1D89535600C21486 /* main.m */,
+				747664A91D89535600C21486 /* Assets.xcassets */,
+				747664AB1D89535600C21486 /* LaunchScreen.storyboard */,
+				747664AE1D89535600C21486 /* Info.plist */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
@@ -95,14 +123,10 @@
 		747664BB1D8953DE00C21486 /* CKDownloadManager */ = {
 			isa = PBXGroup;
 			children = (
-				2A4D25B11D8B8B6500181830 /* CKDownloadManager2.h */,
-				2A4D25B21D8B8B6500181830 /* CKDownloadManager2.m */,
 				747664BC1D8953DE00C21486 /* CKDownloadManager.h */,
 				747664BD1D8953DE00C21486 /* CKDownloadManager.m */,
 				747664BE1D8953DE00C21486 /* CKDownloadTask.h */,
 				747664BF1D8953DE00C21486 /* CKDownloadTask.m */,
-				747664C21D89547200C21486 /* NSString+Security.h */,
-				747664C31D89547200C21486 /* NSString+Security.m */,
 			);
 			path = CKDownloadManager;
 			sourceTree = "<group>";
@@ -133,11 +157,13 @@
 		747664921D89535600C21486 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0730;
+				LastUpgradeCheck = 0800;
 				ORGANIZATIONNAME = "陈凯";
 				TargetAttributes = {
 					747664991D89535600C21486 = {
 						CreatedOnToolsVersion = 7.3.1;
+						DevelopmentTeam = UQUP92XAFZ;
+						ProvisioningStyle = Manual;
 					};
 				};
 			};
@@ -177,13 +203,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				747664A51D89535600C21486 /* ViewController.m in Sources */,
+				747664A51D89535600C21486 /* HomeViewController.m in Sources */,
+				7439F96C1D93B63D00B23FAC /* VideoCell.m in Sources */,
 				747664C11D8953DE00C21486 /* CKDownloadTask.m in Sources */,
 				747664A21D89535600C21486 /* AppDelegate.m in Sources */,
-				747664C41D89547200C21486 /* NSString+Security.m in Sources */,
 				747664C01D8953DE00C21486 /* CKDownloadManager.m in Sources */,
-				2A4D25B31D8B8B6500181830 /* CKDownloadManager2.m in Sources */,
 				7476649F1D89535600C21486 /* main.m in Sources */,
+				7439F96F1D93B7DE00B23FAC /* VideoTask.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -223,8 +249,10 @@
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
@@ -268,8 +296,10 @@
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
@@ -297,10 +327,13 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				DEVELOPMENT_TEAM = UQUP92XAFZ;
 				INFOPLIST_FILE = CKDownloader/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.MrChen.CKDownloader;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "fbfb044f-0dff-4a9c-9498-e235599df49d";
+				PROVISIONING_PROFILE_SPECIFIER = "包含所有设备的测试证书";
 			};
 			name = Debug;
 		};
@@ -308,10 +341,13 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				DEVELOPMENT_TEAM = UQUP92XAFZ;
 				INFOPLIST_FILE = CKDownloader/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.MrChen.CKDownloader;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "fbfb044f-0dff-4a9c-9498-e235599df49d";
+				PROVISIONING_PROFILE_SPECIFIER = "包含所有设备的测试证书";
 			};
 			name = Release;
 		};

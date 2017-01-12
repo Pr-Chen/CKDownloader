@@ -5,7 +5,6 @@
 //  Copyright © 2015年 陈凯. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
 #import "CKDownloadTask.h"
 
 @interface CKDownloadManager : NSObject
@@ -25,10 +24,12 @@
 
 - (CKDownloadTask *)taskForUrl:(NSString *)url;
 
+//删除任务
 - (void)deleteTask:(CKDownloadTask *)task deleteFile:(BOOL)deleteFile;
+//删除所有任务
 - (void)deleteAllTasks;
 
-//继续任务
+//开始任务
 - (void)startTask:(CKDownloadTask *)task;
 
 //暂停任务
