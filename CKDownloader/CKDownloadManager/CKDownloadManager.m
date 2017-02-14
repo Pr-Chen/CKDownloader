@@ -430,7 +430,9 @@ static CKDownloadManager *_defaultManager;
         NSArray *recordAry = [NSArray arrayWithContentsOfFile:CKAllTaskRecordFilePath];
         if (recordAry.count) {
             for (NSDictionary *dict in recordAry) {
-                CKDownloadTask *task = [[CKDownloadTask alloc] initWithDictionary:dict];
+                NSLog(@"字典：%@",dict);
+                Class class = dict[@"class"] ? NSClassFromString(dict[@"class"]) : CKDownloadTask.class;
+                CKDownloadTask *task = [[class alloc] initWithDictionary:dict];
                 task.existSize = CKFileExistSize(task.url);
                 [_allTasks addObject:task];
             }

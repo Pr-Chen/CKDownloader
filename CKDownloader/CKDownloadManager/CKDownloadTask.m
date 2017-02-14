@@ -33,6 +33,7 @@
 - (NSDictionary *)dictionary {
     
     NSMutableDictionary *dict = [NSMutableDictionary dictionary];
+    dict[@"class"] = NSStringFromClass(self.class);
     dict[@"url"] = self.url;
     dict[@"fileUrl"] = self.fileUrl;
     dict[@"expectedSize"] = @(self.expectedSize);
