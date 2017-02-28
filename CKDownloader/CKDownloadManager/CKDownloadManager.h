@@ -26,6 +26,7 @@
 
 //删除任务
 - (void)deleteTask:(CKDownloadTask *)task deleteFile:(BOOL)deleteFile;
+
 //删除所有任务
 - (void)deleteAllTasks;
 

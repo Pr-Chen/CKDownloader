@@ -11,32 +11,38 @@
 #import "VideoCell.h"
 
 @interface HomeViewController ()
-{
-    NSMutableArray *_taskAry;
-}
+
+@property (strong, nonatomic) NSArray *urls;
+@property (strong, nonatomic) NSMutableArray *tasks;
+
 @end
 
 @implementation HomeViewController
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
     NSLog(@"%@",NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES));
+    
+    self.urls = @[
+                  @"http://vod.butel.com/bc95f18b224345138bff7132fd0a8b96.mp4",
+                  @"http://vod.butel.com/334f33021cff403aba860e80f601c29a.mp4",
+                  @"http://vod.butel.com/a54a4b949f5541178ebaa66d7cd104a8.mp4"
+                  ];
+    
     CKDownloadManager *manager = [CKDownloadManager defaultManager];
-    _taskAry = manager.allTasks;
+    self.tasks = manager.allTasks;
     
-    NSString *url1 = @"http://vod.butel.com/bc95f18b224345138bff7132fd0a8b96.mp4";
-    VideoTask *task1 = [VideoTask taskWithUrl:url1 progress:^(NSInteger receivedSize, NSInteger expectedSize) {
-        NSLog(@"%.4f",1.0*receivedSize/expectedSize);
-    } stateChangeBlock:^(CKDownloadTaskState state, NSString *message) {
-        NSLog(@"%@",message);
-    }];
-    
-    [manager startTask:task1];
+    for (NSString *url in self.tasks) {
+        [manager downloadUrl:url progress:^(NSInteger receivedSize, NSInteger expectedSize) {
+            NSLog(@"%.4f",1.0*receivedSize/expectedSize);
+        } stateChangeBlock:^(CKDownloadTaskState state, NSString *message) {
+            NSLog(@"%@",message);
+        }];
+    }
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return _taskAry.count;
+    return self.tasks.count;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -44,7 +50,7 @@
     VideoCell *cell = [tableView dequeueReusableCellWithIdentifier:[VideoCell cellID]];
     
     //设置数据
-    cell.videoTask = _taskAry[indexPath.row];
+    cell.videoTask = self.tasks[indexPath.row];
     
     return cell;
 }
