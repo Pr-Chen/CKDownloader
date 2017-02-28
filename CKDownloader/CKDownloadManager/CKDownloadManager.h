@@ -21,6 +21,7 @@
 + (instancetype)defaultManager;
 
 - (CKDownloadTask *)downloadUrl:(NSString *)url progress:(CKDownloadTaskProgressBlock)progressBlock stateChangeBlock:(CKDownloadTaskStateChangeBlock)stateChangeBlock;
+- (CKDownloadTask *)downloadUrl:(NSString *)url class:(Class)taskClass progress:(CKDownloadTaskProgressBlock)progressBlock stateChangeBlock:(CKDownloadTaskStateChangeBlock)stateChangeBlock;
 
 - (CKDownloadTask *)taskForUrl:(NSString *)url;
 

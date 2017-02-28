@@ -51,16 +51,20 @@ static CKDownloadManager *_defaultManager;
 #pragma mark - 创建任务
 
 - (CKDownloadTask *)downloadUrl:(NSString *)url progress:(CKDownloadTaskProgressBlock)progressBlock stateChangeBlock:(CKDownloadTaskStateChangeBlock)stateChangeBlock {
+    return [self downloadUrl:url class:nil progress:progressBlock stateChangeBlock:stateChangeBlock];
+}
+
+- (CKDownloadTask *)downloadUrl:(NSString *)url class:(Class)taskClass progress:(CKDownloadTaskProgressBlock)progressBlock stateChangeBlock:(CKDownloadTaskStateChangeBlock)stateChangeBlock {
     if (!url.length) {
         return nil;
     }
     
     CKDownloadTask *task = [self taskForUrl:url];
     if (!task) {
+        Class class = taskClass ?: [CKDownloadTask class];
+        task = [class new];
         task.url = url;
         task.creatDate = [NSDate date];
-        [self.allTasks insertObject:task atIndex:0];
-        [self updateAllTaskRecordFile];
     }
     task.progressBlock = progressBlock;
     task.stateChangeBlock = stateChangeBlock;
@@ -87,6 +91,7 @@ static CKDownloadManager *_defaultManager;
         }
         else {
             [self.allTasks insertObject:task atIndex:0];
+            [self updateAllTaskRecordFile];
         }
     }
     
@@ -136,7 +141,6 @@ static CKDownloadManager *_defaultManager;
 
 //创建新的输出流
 - (void)creatStreamForTask:(CKDownloadTask *)task {
-    
     NSOutputStream *stream = [NSOutputStream outputStreamToFileAtPath:CKFilePath(task.url) append:YES];
     task.stream = stream;
 }
@@ -160,6 +164,8 @@ static CKDownloadManager *_defaultManager;
     [task.dataTask suspend];
     [task.stream close];
     
+    //长时间暂停dataTask会自动失败,故将其置为nil
+//    task.dataTask = nil;
     task.state = CKDownloadTaskStatePaused;
     
     if (shouldStart) {
@@ -304,7 +310,7 @@ static CKDownloadManager *_defaultManager;
     NSInteger writedLength = [task.stream write:data.bytes maxLength:data.length];
     
     task.existSize += writedLength;
-    if (writedLength <= data.length) {
+    if (writedLength < data.length) {
         
         [task.dataTask cancel];
         task.dataTask = nil;
@@ -328,15 +334,17 @@ static CKDownloadManager *_defaultManager;
  */
 - (void)URLSession:(NSURLSession *)session task:(NSURLSessionTask *)dataTask didCompleteWithError:(NSError *)error {
     
+    NSString *message;
     CKDownloadTask *task = [self taskForDataTask:(NSURLSessionDataTask *)dataTask];
     if (task.existSize == task.expectedSize) {
-        
         task.state = CKDownloadTaskStateFinished;
         task.finishDate = [NSDate date];
         [self updateAllTaskRecordFile];
+        message = @"下载完成";
     }
     else if (error){
         task.state = CKDownloadTaskStateFailed;
+        message = @"下载失败";
     }
     
     task.dataTask = nil;
@@ -346,7 +354,7 @@ static CKDownloadManager *_defaultManager;
     [self makeAnyWaitingTaskRunning];
     
     if (task.stateChangeBlock) {
-        task.stateChangeBlock(task.state, @"下载完成");
+        task.stateChangeBlock(task.state, message);
     }
 }
 
@@ -430,8 +438,10 @@ static CKDownloadManager *_defaultManager;
         NSArray *recordAry = [NSArray arrayWithContentsOfFile:CKAllTaskRecordFilePath];
         if (recordAry.count) {
             for (NSDictionary *dict in recordAry) {
-                NSLog(@"字典：%@",dict);
                 Class class = dict[@"class"] ? NSClassFromString(dict[@"class"]) : CKDownloadTask.class;
+                if (!class) {
+                    continue;
+                }
                 CKDownloadTask *task = [[class alloc] initWithDictionary:dict];
                 task.existSize = CKFileExistSize(task.url);
                 [_allTasks addObject:task];
@@ -503,7 +513,12 @@ static CKDownloadManager *_defaultManager;
     int length = (int)strlen(string);
     unsigned char bytes[CC_MD5_DIGEST_LENGTH];
     CC_MD5(string, length, bytes);
-    return [[NSString alloc] initWithBytes:bytes length:CC_MD5_DIGEST_LENGTH encoding:NSUTF8StringEncoding];
+    
+    NSMutableString *mutableString = @"".mutableCopy;
+    for (int i = 0; i < CC_MD5_DIGEST_LENGTH; i++) {
+        [mutableString appendFormat:@"%02x", bytes[i]];
+    }
+    return [NSString stringWithString:mutableString];
 }
 
 @end

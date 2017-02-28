@@ -29,10 +29,11 @@ typedef void(^CKDownloadTaskStateChangeBlock)(CKDownloadTaskState state, NSStrin
 //只转换存储所需要的属性
 - (NSDictionary *)dictionary;
 
-//必要的属性
-
 //下载地址
 @property (nonatomic, copy) NSString *url;
+
+//任务名称
+@property (nonatomic, copy) NSString *name;
 
 //下载状态
 @property (nonatomic, assign) CKDownloadTaskState state;

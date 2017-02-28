@@ -11,8 +11,7 @@
 @implementation VideoTask
 
 - (instancetype)initWithDictionary:(NSDictionary *)dict {
-    if (self = [super init]) {
-        self.name = dict[@"name"];
+    if (self = [super initWithDictionary:dict]) {
         self.imageName = dict[@"imageName"];
     }
     return self;
@@ -21,7 +20,6 @@
 - (NSDictionary *)dictionary {
     
     NSMutableDictionary *dict = [[NSMutableDictionary alloc] initWithDictionary:[super dictionary]];
-    dict[@"name"] = self.name;
     dict[@"imageName"] = self.imageName;
     return dict;
 }

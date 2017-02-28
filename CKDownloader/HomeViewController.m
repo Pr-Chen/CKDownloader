@@ -10,8 +10,9 @@
 #import "CKDownloadManager.h"
 #import "VideoCell.h"
 
-@interface HomeViewController ()
+@interface HomeViewController () <UITableViewDataSource, UITableViewDelegate>
 
+@property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (strong, nonatomic) NSArray *urls;
 @property (strong, nonatomic) NSMutableArray *tasks;
 
@@ -25,20 +26,24 @@
     
     self.urls = @[
                   @"http://vod.butel.com/bc95f18b224345138bff7132fd0a8b96.mp4",
-                  @"http://vod.butel.com/334f33021cff403aba860e80f601c29a.mp4",
-                  @"http://vod.butel.com/a54a4b949f5541178ebaa66d7cd104a8.mp4"
+//                  @"http://vod.butel.com/334f33021cff403aba860e80f601c29a.mp4",
+//                  @"http://vod.butel.com/a54a4b949f5541178ebaa66d7cd104a8.mp4"
                   ];
     
     CKDownloadManager *manager = [CKDownloadManager defaultManager];
-    self.tasks = manager.allTasks;
-    
-    for (NSString *url in self.tasks) {
-        [manager downloadUrl:url progress:^(NSInteger receivedSize, NSInteger expectedSize) {
+    for (NSString *url in self.urls) {
+        [manager downloadUrl:url class:[VideoTask class] progress:^(NSInteger receivedSize, NSInteger expectedSize) {
             NSLog(@"%.4f",1.0*receivedSize/expectedSize);
+            
         } stateChangeBlock:^(CKDownloadTaskState state, NSString *message) {
             NSLog(@"%@",message);
         }];
     }
+    self.tasks = manager.allTasks;
+    
+    [NSTimer scheduledTimerWithTimeInterval:0.5 repeats:YES block:^(NSTimer * _Nonnull timer) {
+        [self.tableView reloadData];
+    }];
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
@@ -55,6 +60,16 @@
     return cell;
 }
 
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    CKDownloadTask *task = self.tasks[indexPath.row];
+    if (task.state == CKDownloadTaskStateRunning) {
+        [[CKDownloadManager defaultManager] pauseTask:task];
+    }
+    else if (task.state == CKDownloadTaskStatePaused) {
+        [[CKDownloadManager defaultManager] startTask:task];
+    }
+    [tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
+}
 
 
 @end

@@ -21,6 +21,7 @@
 - (instancetype)initWithDictionary:(NSDictionary *)dict {
     if (self = [super init]) {
         self.url = dict[@"url"];
+        self.name = dict[@"name"];
         self.fileUrl = dict[@"fileUrl"];
         self.expectedSize = [dict[@"expectedSize"] integerValue];
         self.creatDate = dict[@"creatDate"];
@@ -35,6 +36,7 @@
     NSMutableDictionary *dict = [NSMutableDictionary dictionary];
     dict[@"class"] = NSStringFromClass(self.class);
     dict[@"url"] = self.url;
+    dict[@"name"] = self.name;
     dict[@"fileUrl"] = self.fileUrl;
     dict[@"expectedSize"] = @(self.expectedSize);
     dict[@"creatDate"] = self.creatDate;
